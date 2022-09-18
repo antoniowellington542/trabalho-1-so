@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <vector>
-
+#include <chrono>
 
 class Matrix{
     private:
@@ -66,6 +66,7 @@ class MultiplyMatrix{
                       }
                   }
               }
+
         }
 
         std::vector<std::vector<int> >& getMatrixResult(){
@@ -97,19 +98,18 @@ int main(int argc, char *argv[]){
 
     MultiplyMatrix *multiplyMatrix = new MultiplyMatrix(&matrix_a, &matrix_b);
 
-    multiplyMatrix->mountMatrix();
+    int total_time;
+    for(int i=0;i<10;i++){
+        std::cout << "Execução " << i << "\n";
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        multiplyMatrix->mountMatrix();
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        
+        total_time += std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count();
+        
+    }
 
-    // View
-    View view;
-
-    std::cout << "Matrix A\n";
-    view.printMatrix(&matrix_A->getMatrix());
-    std::cout << "\n";
-    std::cout << "Matrix B\n";
-    view.printMatrix(&matrix_B->getMatrix());
-    std::cout << "\n";
-    std::cout << "Matrix C\n";
-    view.printMatrix(&multiplyMatrix->getMatrixResult());
+    std::cout << "Média de tempo: " << total_time/10 << "ms\n";
 
     delete matrix_A;
     delete matrix_B;
