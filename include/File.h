@@ -7,14 +7,16 @@
 
 #include "Matriz.h"
 #include <fstream>
+#include <iostream>
+#include <stdlib.h>
 
 class File{
     private:
         std::string file;
     public:
-        File(std::string file);
-        void printDataInFIle(IMatrix matrix_A, IMatrix matrix_B);
-        void scanDataOfFile(FILE file);
+        File(std::string file_name);
+        void printDataInFIle(IMatrix *matrix_A);
+        IMatrix &scanDataOfFile(std::string file_name);
 };
 
 #endif //TRABALHO_1_SO_FILE_H
