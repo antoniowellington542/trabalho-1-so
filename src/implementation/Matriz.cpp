@@ -13,9 +13,9 @@ void Matrix::mountMatrix(std::vector<int> numbersOfMatrix, int lines, int column
     std::vector<int> list;
 
     for (int i = 0; i < lines; i++) {
-        this->_matrix.matrix.push_back(std::vector<int>());
+        _matrix.matrix.push_back(std::vector<int>());
         for (int j = 0; j < columns; j++) {
-            list.push_back(numbersOfMatrix[k]);
+            _matrix.matrix[i].push_back(numbersOfMatrix[k]);
             k++;
         }
     }
