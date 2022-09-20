@@ -5,31 +5,8 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include "../../include/Matriz.h"
 
-class Matrix{
-    private:
-        int lines;
-        int columns;
-        std::vector<std::vector<int> > matrix;
-
-    public:
-        Matrix(int lines, int columns){
-            this->lines = lines;
-            this->columns = columns;
-        }
-        void mountMatrix(){
-            for(int i=0;i<this->lines;i++){
-                matrix.push_back(std::vector<int>());
-                for(int j = 0;j<this->columns;j++){
-                    matrix[i].push_back(rand()%100 +1);
-                }
-            }
-        }
-
-        std::vector<std::vector<int> >& getMatrix(){
-            return matrix;
-        }
-};
 
 class View{
     public:
@@ -44,11 +21,11 @@ class View{
 };
 
 class MultiplyMatrix{
-    std::vector<std::vector<int> > matrix_A;
-    std::vector<std::vector<int> > matrix_B;
-    std::vector<std::vector<int> > matrix_C;
+    IMatrix matrix_A;
+    IMatrix matrix_B;
+    IMatrix matrix_C;
     public:
-        MultiplyMatrix(std::vector<std::vector<int> >* matrix_A, std::vector<std::vector<int> >* matrix_B){
+        MultiplyMatrix(IMatrix *matrix_A, IMatrix *matrix_B){
             this->matrix_A = *matrix_A;
             this->matrix_B = *matrix_B;
         }
@@ -94,7 +71,7 @@ int main(int argc, char *argv[]){
     Matrix *matrix_B = new Matrix(lines, columns);
 
     matrix_B->mountMatrix();
-    std::vector<std::vector<int> > matrix_b = matrix_B->getMatrix();
+    IMatrix matrix_b = matrix_B->getMatrix();
 
     MultiplyMatrix *multiplyMatrix = new MultiplyMatrix(&matrix_a, &matrix_b);
 
