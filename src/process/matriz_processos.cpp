@@ -24,12 +24,20 @@
 
 int main(int argc, char* argv[]){
 
-    int lines_matrix_A = atoi(argv[1]);
-    int columns_matrix_A = atoi(argv[2]);
-    int lines_matrix_B = atoi(argv[3]);
-    int columns_matrix_B = atoi(argv[4]);
+    File matrix_A_file;
+    File matrix_B_file;
 
-    int size = lines_matrix_A*columns_matrix_B;
+    std::string matrix_A_file_name = argv[1];
+    std::string matrix_B_file_name = argv[2];
+    int p = argv[3];
+
+    IMatrix matrix_a = matrix_A_file.scanDataOfFile(matrix_A_file_name);
+    IMatrix matrix_b = matrix_B_file.scanDataOfFile(matrix_B_file_name);
+
+    int lines  = matrix_a.matrix.size();
+    int columns = atrix_b.matrix[0].size();
+
+    int size = lines*columns;
 
     int shmid = shmget(IPC_PRIVATE, size*sizeof(int), IPC_CREAT | 0666);
 
