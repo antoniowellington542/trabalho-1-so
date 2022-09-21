@@ -29,6 +29,6 @@ int main(int argc, char* argv[]){
 
     std::string file_name_2 = "matrixB";
     File second_file;
-    second_file.printDataInFIle(&matrix_B.getMatrix(), file_name);
+    second_file.printDataInFIle(&matrix_B.getMatrix(), file_name_2);
 
 }
