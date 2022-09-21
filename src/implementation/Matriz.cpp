@@ -10,36 +10,16 @@ void Matrix::mountMatrix(std::vector<int> numbersOfMatrix, int lines, int column
 
     int k=0;
 
-    std::vector<int> list;
+    _matrix.lines = lines;
+    _matrix.columns = columns;
 
     for (int i = 0; i < lines; i++) {
         _matrix.matrix.push_back(std::vector<int>());
-        for (int j = 0; j < columns; j++) {
+        for(int j=0;j<columns;j++){
             _matrix.matrix[i].push_back(numbersOfMatrix[k]);
             k++;
         }
     }
-
-}
-
-IMatrix &Matrix::multiplyMatrix(IMatrix *matrix_B) {
-
-    int lines_A = _matrix.lines;
-    int columns_A = _matrix.columns;
-    int columns_B = matrix_B->columns;
-    IMatrix *matrix_C;
-
-    for(int i=0;i<lines_A;i++){
-        matrix_C->matrix.push_back(std::vector<int>());
-        for(int j=0;j<columns_B;j++){
-            matrix_C->matrix[i].push_back(0);
-            for(int k=0;k<columns_A;k++){
-                matrix_C->matrix[i][j] += _matrix.matrix[i][k] * matrix_B->matrix[k][j];
-            }
-        }
-    }
-
-    return *matrix_C;
 }
 
 IMatrix &Matrix::getMatrix() {

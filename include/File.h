@@ -11,12 +11,9 @@
 #include <stdlib.h>
 
 class File{
-    private:
-        std::string file;
     public:
-        File(std::string file_name);
-        void printDataInFIle(IMatrix *matrix_A);
-        IMatrix &scanDataOfFile(std::string file_name);
+        void printDataInFIle(IMatrix *matrix_A, std::string file_name);
+        IMatrix scanDataOfFile(std::string file_name);
 };
 
 #endif //TRABALHO_1_SO_FILE_H

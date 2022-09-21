@@ -21,7 +21,6 @@ class Matrix{
     public:
         void mountMatrix(std::vector<int> numbersOfMatrix, int lines, int columns);
         IMatrix &getMatrix();
-        IMatrix &multiplyMatrix(IMatrix *matrix_B);
         std::vector<int> generateNumbers(int lines, int columns);
 
 };
