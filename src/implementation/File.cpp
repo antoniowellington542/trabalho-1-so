@@ -3,8 +3,9 @@
 //
 
 #include "../../include/File.h"
+#include <iomanip>
 
-void File::printDataInFIle(IMatrix *matrix_A, std::string file_name) {
+void File::printDataInFIle(IMatrix *matrix_A, std::string file_name, double time_execution, std::string algorithm) {
 
     std::ofstream new_file;
     std::string path = "../../data/" + file_name + ".txt";
@@ -12,13 +13,26 @@ void File::printDataInFIle(IMatrix *matrix_A, std::string file_name) {
     new_file.open(path, std::ios::trunc);
 
     if(new_file.is_open()){
-       // Matrix A
-       for(auto i: matrix_A->matrix){
-           for(auto j: i){
-               new_file << j << " ";
+       // Matrix
+       if(algorithm == "assistant"){
+           for(auto i: matrix_A->matrix){
+               for(auto j: i){
+                   new_file << j << " ";
+               }
+               new_file << "\n";
            }
-           new_file << "\n";
+       }else if(algorithm == "sequential"){
+           new_file << matrix_A->matrix.size() << "x" << matrix_A->matrix[0].size() << std::endl;
+           for(int i=0;i<matrix_A->matrix.size();i++){
+               for(int j=0;j<matrix_A->matrix[0].size();j++){
+                   new_file << "C" << i+1 << j+1 << " " << matrix_A->matrix[i][j] << std::endl;
+               }
+           }
        }
+        if(time_execution != -1){
+            new_file << std::fixed << std::setprecision(4);
+            new_file << time_execution << "[ms]\n";
+        }
     }else{
         std::cout << "Arquivo não existe!";
     }

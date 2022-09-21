@@ -12,7 +12,7 @@
 
 class File{
     public:
-        void printDataInFIle(IMatrix *matrix_A, std::string file_name);
+        void printDataInFIle(IMatrix *matrix_A, std::string file_name, double time_execution=-1, std::string algorithm="assistant");
         IMatrix scanDataOfFile(std::string file_name);
 };
 
