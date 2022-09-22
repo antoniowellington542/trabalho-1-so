@@ -9,10 +9,11 @@
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
+#include <tuple>
 
 class File{
     public:
-        void printDataInFIle(IMatrix *matrix_A, std::string file_name, double time_execution=-1, std::string algorithm="assistant");
+        void printDataInFIle(std::tuple<int,int, std::vector<int> > matrix, std::string file_name, double time_execution=-1, std::string algorithm="assistant");
         IMatrix scanDataOfFile(std::string file_name);
 };
 

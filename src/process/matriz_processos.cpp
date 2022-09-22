@@ -1,4 +1,4 @@
-#include "../../include/Matriz.h"
+#include "../../include/index.h"
 
 #include <cstring>
 #include <iostream>
@@ -24,18 +24,17 @@
 
 int main(int argc, char* argv[]){
 
-    File matrix_A_file;
-    File matrix_B_file;
+    File matrix_file;
 
     std::string matrix_A_file_name = argv[1];
     std::string matrix_B_file_name = argv[2];
-    int p = argv[3];
+    int p = atoi(argv[3]);
 
-    IMatrix matrix_a = matrix_A_file.scanDataOfFile(matrix_A_file_name);
-    IMatrix matrix_b = matrix_B_file.scanDataOfFile(matrix_B_file_name);
+    IMatrix matrix_a = matrix_file.scanDataOfFile(matrix_A_file_name);
+    IMatrix matrix_b = matrix_file.scanDataOfFile(matrix_B_file_name);
 
     int lines  = matrix_a.matrix.size();
-    int columns = atrix_b.matrix[0].size();
+    int columns = matrix_b.matrix[0].size();
 
     int size = lines*columns;
 
@@ -46,34 +45,64 @@ int main(int argc, char* argv[]){
         exit(1);
     }
 
-    Matrix *matrix_A = new Matrix(lines_matrix_A, columns_matrix_A);
-    matrix_A->mountMatrix();
-    Matrix *matrix_B = new Matrix(lines_matrix_B, columns_matrix_B);
-    matrix_B->mountMatrix();
-
     int *matrix = (int*) shmat(shmid,0,0);
 
-    pid_t process[lines_matrix_A];
+    double total_time;
 
-    int total_time;
+    Operation operation;
 
-    for(int k=0;k<10;k++){
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-        for(int i=0;i<lines_matrix_A;i++){
-            process[i] = fork();
-            if(process[i] == 0){
-                multiply_matrix(matrix, matrix_A, matrix_B, i);
-                exit(0);
-            }
-            process[i] =  wait(NULL);
-        }
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        total_time = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count();
+    int number_of_loop = size/p;
+
+    if(size%p != 0){
+        number_of_loop++;
     }
 
-    double media_time = total_time/10;
+    pid_t process[number_of_loop];
+
+//
+    int last_position=0;
+    std::tuple<int,int, std::vector<int> > pos(0,0,0);
+    for(int i=0;i<number_of_loop;i++){
+        process[i] = fork();
+        if(process[i] == 0){
+            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            pos = operation.multiply_line(matrix, matrix_a, matrix_b, std::get<0>(pos), std::get<1>(pos), p, last_position);
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            total_time = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count();
+            std::string file_name = "process "+std::to_string(i+1);
+            for(int i=0;i<std::get<2>(pos).size();i++){
+                std::cout << std::get<2>(pos)[i] << "-";
+            }
+            std::cout << std::endl;
+            std::tuple<int,int,std::vector<int> > list(lines,columns,std::get<2>(pos));
+            matrix_file.printDataInFIle(list, file_name, total_time, "sequential");
+            last_position += p;
+            exit(0);
+        }
+        process[i] =  wait(NULL);
+    }
+//
     wait(NULL);
-    std::cout << "Processo executado em " << total_time << "[ms] e a média de tempo foi de "<< media_time << "[ms].\n";
+//
+////    for(int i=0;i<matrix_a.matrix.size();i++){
+////        for(int j=0;j<matrix_a.matrix[0].size();j++){
+////            std::cout << matrix_a.matrix[i][j] << " ";
+////        }
+////        std::cout << std::endl;
+////    }
+////    std::cout << std::endl;
+////    for(int i=0;i<matrix_b.matrix.size();i++){
+////        for(int j=0;j<matrix_b.matrix[0].size();j++){
+////            std::cout << matrix_b.matrix[i][j] << " ";
+////        }
+////        std::cout << std::endl;
+////    }
+////
+////    for(int i=0;i<size;i++){
+////        std::cout << matrix[i] << "-";
+////    }
+//
+////    std::cout << "Processo executado em " << total_time << "[ms] e a média de tempo foi de "<< media_time << "[ms].\n";
 
     shmdt(matrix);
     shmctl(shmid,IPC_RMID, NULL);

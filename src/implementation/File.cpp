@@ -4,8 +4,8 @@
 
 #include "../../include/File.h"
 #include <iomanip>
-
-void File::printDataInFIle(IMatrix *matrix_A, std::string file_name, double time_execution, std::string algorithm) {
+#include <tuple>
+void File::printDataInFIle(std::tuple<int,int, std::vector<int> > matrix, std::string file_name, double time_execution, std::string algorithm) {
 
     std::ofstream new_file;
     std::string path = "../../data/" + file_name + ".txt";
@@ -14,18 +14,26 @@ void File::printDataInFIle(IMatrix *matrix_A, std::string file_name, double time
 
     if(new_file.is_open()){
        // Matrix
+       int rows = std::get<0>(matrix);
+       int columns = std::get<1>(matrix);
+       std::vector<int> list_numbers = std::get<2>(matrix);
        if(algorithm == "assistant"){
-           for(auto i: matrix_A->matrix){
-               for(auto j: i){
-                   new_file << j << " ";
+           for(int i=0;i<rows*columns;i++){
+               new_file << list_numbers[i] << " ";
+               if((i+1)%columns == 0){
+                   new_file << "\n";
                }
-               new_file << "\n";
            }
-       }else if(algorithm == "sequential"){
-           new_file << matrix_A->matrix.size() << "x" << matrix_A->matrix[0].size() << std::endl;
-           for(int i=0;i<matrix_A->matrix.size();i++){
-               for(int j=0;j<matrix_A->matrix[0].size();j++){
-                   new_file << "C" << i+1 << j+1 << " " << matrix_A->matrix[i][j] << std::endl;
+       }else{
+           new_file << rows << "x" << columns << std::endl;
+           int j=1;
+           int k=1;
+           for(int i=0;i<rows*columns;i++){
+               new_file << "C(" << k << "," <<j << ") " << list_numbers[i] << std::endl;
+               j++;
+               if((i+1)%columns == 0){
+                   j=1;
+                   k++;
                }
            }
        }

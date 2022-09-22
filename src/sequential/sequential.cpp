@@ -21,19 +21,15 @@ int main(int argc, char* argv[]){
     IMatrix matrix_result;
 
     double total_time;
-    for(int i=0;i<10;i++){
-        std::cout << "Execução " << i << "\n";
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-        matrix_result = operation.multiply(matrix_a, matrix_b);
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        total_time += std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count();
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    matrix_result = operation.multiply(matrix_a, matrix_b);
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    total_time = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count();
 
-    }
-
-    double media_time_execution = total_time/10;
+    auto matrix = operation.formatData(matrix_result);
 
     File data_file;
-    data_file.printDataInFIle(&matrix_result,"sequential", media_time_execution, "sequential");
+    data_file.printDataInFIle(matrix,"sequential", total_time, "sequential");
 
     return 0;
 }
