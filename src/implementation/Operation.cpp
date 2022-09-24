@@ -26,13 +26,14 @@ IMatrix Operation::multiply(IMatrix matrix_A, IMatrix matrix_B) {
 
 std::tuple<int,int,std::vector<int>> Operation::multiply_line(int *matrix,IMatrix matrix_A, IMatrix matrix_B, int i, int j, int p, int last_position) {
 
+    std::cout << "i: " << i << " j: " << j << " lastPosition: " << last_position << " p: " << p << std::endl;
     int count = 0;
     std::vector<int> list;
     for(;i<matrix_A.matrix.size();i++){
         for(;j<matrix_B.matrix[i].size();j++){
             for(int k=0;k<matrix_A.matrix[0].size();k++){
                matrix[last_position] += matrix_A.matrix[i][k] * matrix_B.matrix[k][j];
-               std::cout << matrix[last_position] << "-";
+//               std::cout << matrix[last_position] << "-";
             }
             last_position++;
             count++;
