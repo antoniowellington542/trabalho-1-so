@@ -10,7 +10,7 @@
 class Operation{
     public:
         IMatrix multiply(IMatrix matrix_A, IMatrix matrix_B);
-        std::tuple<int,int,std::vector<int>> multiply_line(int *matrix, IMatrix matrix_A, IMatrix matrix_B, int i=0, int j=0, int p=1, int last_position=0);
+        std::tuple<int,int,std::vector<int>> multiply_process(int *matrix, IMatrix matrix_A, IMatrix matrix_B, int last_line=0, int last_column=0, int p=1, int last_position=0);
         std::tuple<int,int, std::vector<int> > formatData(IMatrix matrix);
 };
 

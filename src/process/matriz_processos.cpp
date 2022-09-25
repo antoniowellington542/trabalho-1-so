@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <sys/shm.h>
 #include <stdlib.h>
+#include <sys/wait.h>
+#include <chrono>
 
 //void multiply_matrix(int *matrix_result, Matrix *matrix_A, Matrix *matrix_B, int line){
 //
@@ -51,31 +53,41 @@ int main(int argc, char* argv[]){
 
     Operation operation;
 
-    int number_of_loop = size/p;
+    auto number_of_loop = [](int a, int b){
+        int tam = a/b;
+        if(a%b != 0)
+            return ++tam;
+        return tam;
+    };
 
-    if(size%p != 0){
-        number_of_loop++;
-    }
+    int tam = number_of_loop(size, p);
 
-    pid_t process[number_of_loop];
+    pid_t process[tam];
 
-//
+
     int last_position=0;
-    std::tuple<int,int, std::vector<int> > pos;
-    for(int i=0;i<number_of_loop;i++){
+    int k=0;
+    int j=0;
+    std::tuple<int,int,std::vector<int> > pos;
+    std::get<0>(pos) = k;
+    std::get<1>(pos) = j;
+    for(int i=0;i<tam;i++){
         process[i] = fork();
         if(process[i] == 0){
             std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-            pos = operation.multiply_line(matrix, matrix_a, matrix_b, std::get<0>(pos), std::get<1>(pos), p, last_position);
-            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            pos = operation.multiply_process(matrix, matrix_a, matrix_b, std::get<0>(pos), std::get<1>(pos), p, last_position);
+//            std::cout << "i: " << std::get<0>(pos) << " j: " << std::get<1>(pos) << std::endl;
+                                                                            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
             total_time = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count();
             std::string file_name = "process "+std::to_string(i+1);
+
             std::cout << std::endl;
-            std::tuple<int,int,std::vector<int> > list(lines,columns,std::get<2>(pos));
-//            matrix_file.printDataInFIle(list, file_name, total_time, "sequential");
+            //std::tuple<int,int,std::vector<int> > list(lines,columns,std::get<2>(pos));
+            //matrix_file.printDataInFIle(list, file_name, total_time, "sequential");
             exit(0);
         }
         last_position += p;
+
         process[i] =  wait(NULL);
     }
 //
