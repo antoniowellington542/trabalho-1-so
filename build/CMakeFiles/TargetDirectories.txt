@@ -1,0 +1,6 @@
+/Users/antonio/Desktop/sistemas operacionais/trabalho-1-so/build/CMakeFiles/assistant.dir
+/Users/antonio/Desktop/sistemas operacionais/trabalho-1-so/build/CMakeFiles/process.dir
+/Users/antonio/Desktop/sistemas operacionais/trabalho-1-so/build/CMakeFiles/sequential.dir
+/Users/antonio/Desktop/sistemas operacionais/trabalho-1-so/build/CMakeFiles/threads.dir
+/Users/antonio/Desktop/sistemas operacionais/trabalho-1-so/build/CMakeFiles/edit_cache.dir
+/Users/antonio/Desktop/sistemas operacionais/trabalho-1-so/build/CMakeFiles/rebuild_cache.dir
